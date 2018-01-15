@@ -55,6 +55,7 @@ struct SlideComponent {
 
 struct Slide {
     vector<SlideComponent> components; 
+    sf::Color background_colour = sf::Color(0, 0, 0, 255);
 
     static Slide simple_centered_text_slide(const string &text, string font_name) {
         Slide slide;
@@ -90,6 +91,8 @@ struct Slideshow {
     void render_current_slide(sf::RenderWindow &window) {
         Slide *current = &slides.at(current_slide);
 
+        window.clear(current->background_colour);
+
         for (auto component: current->components) {
             switch (component.component_type) {
                 case ComponentType::TEXT:
@@ -123,6 +126,8 @@ int main() {
     slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid"));
     slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid"));
     slideshow.add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
+
+    slideshow.slides[1].background_colour = sf::Color(255, 0, 0, 255);
 
     while (window.isOpen()) {
         sf::Event event;
