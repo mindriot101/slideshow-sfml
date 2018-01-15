@@ -114,7 +114,7 @@ struct Slideshow {
 
 int main() {
     FontManager font_manager;
-    font_manager.add("droid", "fonts/DroidSansMono.ttf");
+    font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
 
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML window");
     window.setVerticalSyncEnabled(true);
