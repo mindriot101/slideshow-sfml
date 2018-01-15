@@ -140,6 +140,7 @@ int main() {
                         window.close();
                         break;
                     case sf::Keyboard::N:
+                    case sf::Keyboard::Space:
                         slideshow.next_slide();
                         break;
                     case sf::Keyboard::P:
