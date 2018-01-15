@@ -8,7 +8,10 @@
 
 using namespace std;
 
-void center_text(sf::Text &text, sf::RenderWindow &window);
+const uint32_t WINDOW_WIDTH  = 1280;
+const uint32_t WINDOW_HEIGHT = 720;
+
+void reset_origin(sf::Text &text);
 
 struct FontManager {
     map<string, sf::Font> fonts;
@@ -35,6 +38,19 @@ struct SlideComponent {
     string text;
     string font_name;
     ComponentType component_type = ComponentType::NONE;
+    int x;
+    int y;
+
+    static SlideComponent centered_text(const string &text, const string &font_name) {
+        SlideComponent component;
+        component.text = text;
+        component.component_type = ComponentType::TEXT;
+        component.font_name = font_name;
+        component.x = WINDOW_WIDTH / 2;
+        component.y = WINDOW_HEIGHT / 2;
+
+        return component;
+    }
 };
 
 struct Slide {
@@ -43,10 +59,7 @@ struct Slide {
     static Slide simple_centered_text_slide(const string &text, string font_name) {
         Slide slide;
 
-        SlideComponent component;
-        component.text = text;
-        component.component_type = ComponentType::TEXT;
-        component.font_name = font_name;
+        SlideComponent component = SlideComponent::centered_text(text, font_name);
 
         slide.components.push_back(component);
         return slide;
@@ -85,7 +98,8 @@ struct Slideshow {
                         auto font = font_manager->get(component.font_name);
 
                         sf::Text text(text_content, font, 50);
-                        center_text(text, window);
+                        reset_origin(text);
+                        text.setPosition(component.x, component.y);
                         window.draw(text);
                     break;
                     }
@@ -102,7 +116,7 @@ int main() {
     FontManager font_manager;
     font_manager.add("droid", "fonts/DroidSansMono.ttf");
 
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML window");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML window");
     window.setVerticalSyncEnabled(true);
 
     Slideshow slideshow(font_manager);
@@ -144,7 +158,7 @@ int main() {
 
 
 
-void center_text(sf::Text &text, sf::RenderWindow &window) {
+void reset_origin(sf::Text &text) {
     auto bounds = text.getGlobalBounds();
     auto width = bounds.width;
     auto height = bounds.height;
@@ -152,7 +166,4 @@ void center_text(sf::Text &text, sf::RenderWindow &window) {
     auto half_width = width / 2;
     auto half_height = height / 2;
     text.setOrigin(half_width, half_height);
-
-    auto window_dimensions = window.getSize();
-    text.setPosition(window_dimensions.x / 2, window_dimensions.y / 2);
 }
