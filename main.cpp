@@ -8,10 +8,14 @@
 
 using namespace std;
 
+/* Global variables */
 const uint32_t WINDOW_WIDTH  = 1280;
 const uint32_t WINDOW_HEIGHT = 720;
 
+map<string, sf::Texture> TEXTURES;
+
 void reset_origin(sf::Text &text);
+void reset_origin(sf::Sprite &sprite);
 
 struct FontManager {
     map<string, sf::Font> fonts;
@@ -19,6 +23,7 @@ struct FontManager {
     void add(string name, string filename) {
         sf::Font font;
         if (!font.loadFromFile(filename)) {
+            cerr << "Cannot load font: " << filename << endl;
             exit(EXIT_FAILURE);
         }
         fonts[name] = font;
@@ -29,17 +34,44 @@ struct FontManager {
     }
 };
 
+struct ImageManager {
+    map<string, sf::Sprite> images;
+
+    void add(string name, string filename) {
+        sf::Texture texture;
+        if (!texture.loadFromFile(filename)) {
+            cerr << "Cannot load image: " << filename << endl;
+            exit(EXIT_FAILURE);
+        }
+        TEXTURES[name] = texture;
+
+        sf::Sprite sprite(TEXTURES[name]);
+        images[name] = sprite;
+    }
+
+    sf::Sprite get(string name) {
+        return images[name];
+    }
+};
+
 enum class ComponentType {
     NONE,
     TEXT,
+    IMAGE,
 };
 
 struct SlideComponent {
-    string text;
-    string font_name;
-    ComponentType component_type = ComponentType::NONE;
+    /* General fields */
     int x;
     int y;
+    ComponentType component_type = ComponentType::NONE;
+
+    /* Text fields */
+    string text;
+    string font_name;
+
+    /* Image fields */
+    string image_name;
 
     static SlideComponent centered_text(const string &text, const string &font_name) {
         SlideComponent component;
@@ -49,6 +81,15 @@ struct SlideComponent {
         component.x = WINDOW_WIDTH / 2;
         component.y = WINDOW_HEIGHT / 2;
 
+        return component;
+    }
+
+    static SlideComponent centered_image(const string &image_name) {
+        SlideComponent component;
+        component.image_name = image_name;
+        component.component_type = ComponentType::IMAGE;
+        component.x = WINDOW_WIDTH / 2;
+        component.y = WINDOW_HEIGHT / 2;
         return component;
     }
 };
@@ -65,15 +106,24 @@ struct Slide {
         slide.components.push_back(component);
         return slide;
     }
+
+    static Slide simple_image_slide(const string &image_name) {
+        Slide slide;
+        SlideComponent component = SlideComponent::centered_image(image_name);
+        slide.components.push_back(component);
+        return slide;
+    }
 };
 
 struct Slideshow {
     vector<Slide> slides;
     uint32_t current_slide = 0;
     FontManager *font_manager;
+    ImageManager *image_manager;
 
-    Slideshow(FontManager &font_manager) {
+    Slideshow(FontManager &font_manager, ImageManager &image_manager) {
         this->font_manager = &font_manager;
+        this->image_manager = &image_manager;
     }
 
 
@@ -95,6 +145,8 @@ struct Slideshow {
 
         for (auto component: current->components) {
             switch (component.component_type) {
+                case ComponentType::NONE:
+                    break;
                 case ComponentType::TEXT:
                     {
                         auto text_content = component.text;
@@ -104,11 +156,15 @@ struct Slideshow {
                         reset_origin(text);
                         text.setPosition(component.x, component.y);
                         window.draw(text);
-                    break;
+                        break;
                     }
-                default:
+                case ComponentType::IMAGE:
                     {
-                    break;
+                        auto sprite = image_manager->get(component.image_name);
+                        reset_origin(sprite);
+                        sprite.setPosition(component.x, component.y);
+                        window.draw(sprite);
+                        break;
                     }
             }
         }
@@ -119,10 +175,14 @@ int main() {
     FontManager font_manager;
     font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
 
+    ImageManager image_manager;
+    image_manager.add("cat", "run_tree/images/cat.png");
+
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML window");
     window.setVerticalSyncEnabled(true);
 
-    Slideshow slideshow(font_manager);
+    Slideshow slideshow(font_manager, image_manager);
+    slideshow.add(Slide::simple_image_slide("cat"));
     slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid"));
     slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid"));
     slideshow.add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
@@ -173,4 +233,14 @@ void reset_origin(sf::Text &text) {
     auto half_width = width / 2;
     auto half_height = height / 2;
     text.setOrigin(half_width, half_height);
+}
+
+void reset_origin(sf::Sprite &sprite) {
+    auto bounds = sprite.getGlobalBounds();
+    auto width = bounds.width;
+    auto height = bounds.height;
+
+    auto half_width = width / 2;
+    auto half_height = height / 2;
+    sprite.setOrigin(half_width, half_height);
 }
