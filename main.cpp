@@ -144,6 +144,7 @@ int main() {
                         slideshow.next_slide();
                         break;
                     case sf::Keyboard::P:
+                    case sf::Keyboard::BackSpace:
                         slideshow.previous_slide();
                         break;
                     default:
