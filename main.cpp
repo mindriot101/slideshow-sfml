@@ -138,10 +138,10 @@ struct Slideshow {
         }
     }
 
-    void render_current_slide(sf::RenderWindow &window) {
+    void render_current_slide(sf::RenderWindow *window) {
         Slide *current = &slides.at(current_slide);
 
-        window.clear(current->background_colour);
+        window->clear(current->background_colour);
 
         for (auto component: current->components) {
             switch (component.component_type) {
@@ -152,10 +152,10 @@ struct Slideshow {
                         auto text_content = component.text;
                         auto font = font_manager->get(component.font_name);
 
-                        sf::Text text(text_content, font, 50);
+                        sf::Text text(text_content, font, 84);
                         reset_origin(text);
                         text.setPosition(component.x, component.y);
-                        window.draw(text);
+                        window->draw(text);
                         break;
                     }
                 case ComponentType::IMAGE:
@@ -163,10 +163,30 @@ struct Slideshow {
                         auto sprite = image_manager->get(component.image_name);
                         reset_origin(sprite);
                         sprite.setPosition(component.x, component.y);
-                        window.draw(sprite);
+                        window->draw(sprite);
                         break;
                     }
             }
+        }
+    }
+};
+
+struct MainWindow {
+    sf::RenderWindow *window = nullptr;
+
+    MainWindow() {
+        window = new sf::RenderWindow(
+                sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Presentation"
+                );
+        if (window == nullptr) {
+            cerr << "Error creating render window" << endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    ~MainWindow() {
+        if (window != nullptr) {
+            delete window;
         }
     }
 };
@@ -178,8 +198,8 @@ int main() {
     ImageManager image_manager;
     image_manager.add("cat", "run_tree/images/cat.png");
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "SFML window");
-    window.setVerticalSyncEnabled(true);
+    MainWindow window;
+    window.window->setVerticalSyncEnabled(true);
 
     Slideshow slideshow(font_manager, image_manager);
     slideshow.add(Slide::simple_image_slide("cat"));
@@ -189,15 +209,15 @@ int main() {
 
     slideshow.slides[1].background_colour = sf::Color(255, 0, 0, 255);
 
-    while (window.isOpen()) {
+    while (window.window->isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (window.window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                window.window->close();
             } else if (event.type == sf::Event::KeyReleased) {
                 switch (event.key.code) {
                     case sf::Keyboard::Q:
-                        window.close();
+                        window.window->close();
                         break;
                     case sf::Keyboard::N:
                     case sf::Keyboard::Space:
@@ -207,17 +227,20 @@ int main() {
                     case sf::Keyboard::BackSpace:
                         slideshow.previous_slide();
                         break;
+                    case sf::Keyboard::F:
+                        // toggle_fullscreen(window)window->;
+                        break;
                     default:
                         break;
                 }
             }
         }
 
-        window.clear();
+        window.window->clear();
 
-        slideshow.render_current_slide(window);
+        slideshow.render_current_slide(window.window);
 
-        window.display();
+        window.window->display();
     }
 
     return EXIT_SUCCESS;
