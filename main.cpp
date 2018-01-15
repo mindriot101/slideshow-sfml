@@ -26,20 +26,29 @@ struct FontManager {
     }
 };
 
-enum class SlideType {
+enum class ComponentType {
+    NONE,
     TEXT,
 };
 
-struct Slide {
-    SlideType slide_type;
+struct SlideComponent {
     string text;
     string font_name;
+    ComponentType component_type = ComponentType::NONE;
+};
 
-    static Slide text_slide(const string &text, string font_name) {
+struct Slide {
+    vector<SlideComponent> components; 
+
+    static Slide simple_centered_text_slide(const string &text, string font_name) {
         Slide slide;
-        slide.text = text;
-        slide.slide_type = SlideType::TEXT;
-        slide.font_name = font_name;
+
+        SlideComponent component;
+        component.text = text;
+        component.component_type = ComponentType::TEXT;
+        component.font_name = font_name;
+
+        slide.components.push_back(component);
         return slide;
     }
 };
@@ -67,20 +76,24 @@ struct Slideshow {
 
     void render_current_slide(sf::RenderWindow &window) {
         Slide *current = &slides.at(current_slide);
-        switch (current->slide_type) {
-            case SlideType::TEXT:
-                {
-                    auto text_content = current->text;
-                    auto font = font_manager->get(current->font_name);
-                    sf::Text text(text_content, font, 50);
-                    center_text(text, window);
-                    window.draw(text);
-                break;
-                }
-            default:
-                {
-                break;
-                }
+
+        for (auto component: current->components) {
+            switch (component.component_type) {
+                case ComponentType::TEXT:
+                    {
+                        auto text_content = component.text;
+                        auto font = font_manager->get(component.font_name);
+
+                        sf::Text text(text_content, font, 50);
+                        center_text(text, window);
+                        window.draw(text);
+                    break;
+                    }
+                default:
+                    {
+                    break;
+                    }
+            }
         }
     }
 };
@@ -93,9 +106,9 @@ int main() {
     window.setVerticalSyncEnabled(true);
 
     Slideshow slideshow(font_manager);
-    slideshow.add(Slide::text_slide("Hello SFML", "droid"));
-    slideshow.add(Slide::text_slide("Hello World!", "droid"));
-    slideshow.add(Slide::text_slide("Multi\nline\ntext", "droid"));
+    slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid"));
+    slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid"));
+    slideshow.add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
 
     while (window.isOpen()) {
         sf::Event event;
