@@ -12,6 +12,15 @@ using namespace std;
 const uint32_t WINDOW_WIDTH  = 1280;
 const uint32_t WINDOW_HEIGHT = 720;
 
+/* Colours */
+const sf::Color BLACK(0, 0, 0);
+const sf::Color WHITE(255, 255, 255);
+const sf::Color RED(255, 0, 0);
+const sf::Color GREEN(0, 255, 0);
+const sf::Color BLUE(0, 0, 255);
+
+/* Have to hold the textures at constant points in memory
+ * or else we lose the texture content when making sprites */
 map<string, sf::Texture> TEXTURES;
 
 void reset_origin(sf::Text &text);
@@ -69,15 +78,17 @@ struct SlideComponent {
     /* Text fields */
     string text;
     string font_name;
+    sf::Color font_colour;
 
     /* Image fields */
     string image_name;
 
-    static SlideComponent centered_text(const string &text, const string &font_name) {
+    static SlideComponent centered_text(const string &text, const string &font_name, sf::Color font_colour=WHITE) {
         SlideComponent component;
         component.text = text;
         component.component_type = ComponentType::TEXT;
         component.font_name = font_name;
+        component.font_colour = font_colour;
         component.x = WINDOW_WIDTH / 2;
         component.y = WINDOW_HEIGHT / 2;
 
@@ -98,10 +109,10 @@ struct Slide {
     vector<SlideComponent> components; 
     sf::Color background_colour = sf::Color(0, 0, 0, 255);
 
-    static Slide simple_centered_text_slide(const string &text, string font_name) {
+    static Slide simple_centered_text_slide(const string &text, string font_name, sf::Color font_colour=WHITE) {
         Slide slide;
 
-        SlideComponent component = SlideComponent::centered_text(text, font_name);
+        SlideComponent component = SlideComponent::centered_text(text, font_name, font_colour);
 
         slide.components.push_back(component);
         return slide;
@@ -155,6 +166,7 @@ struct Slideshow {
                         sf::Text text(text_content, font, 84);
                         reset_origin(text);
                         text.setPosition(component.x, component.y);
+                        text.setFillColor(component.font_colour);
                         window->draw(text);
                         break;
                     }
@@ -169,25 +181,44 @@ struct Slideshow {
             }
         }
     }
+
+    void recenter_content() {
+    }
 };
 
 struct MainWindow {
     sf::RenderWindow *window = nullptr;
+    bool fullscreen = false;
 
     MainWindow() {
-        window = new sf::RenderWindow(
-                sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Presentation"
-                );
-        if (window == nullptr) {
-            cerr << "Error creating render window" << endl;
-            exit(EXIT_FAILURE);
-        }
+        window = MainWindow::create_window(false);
+    }
+
+    void toggle_fullscreen() {
+        window->close();
+        delete window;
+
+        fullscreen = !fullscreen;
+        window = MainWindow::create_window(fullscreen);
     }
 
     ~MainWindow() {
         if (window != nullptr) {
             delete window;
         }
+    }
+
+    private:
+
+    static sf::RenderWindow *create_window(bool fullscreen) {
+        auto style = fullscreen ? sf::Style::Default | sf::Style::Fullscreen : sf::Style::Default;
+        auto *window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Presentation", style);
+        if (window == nullptr) {
+            cerr << "Error creating render window" << endl;
+            exit(EXIT_FAILURE);
+        }
+        window->setVerticalSyncEnabled(true);
+        return window;
     }
 };
 
@@ -199,15 +230,16 @@ int main() {
     image_manager.add("cat", "run_tree/images/cat.png");
 
     MainWindow window;
-    window.window->setVerticalSyncEnabled(true);
 
     Slideshow slideshow(font_manager, image_manager);
-    slideshow.add(Slide::simple_image_slide("cat"));
     slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid"));
-    slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid"));
+    slideshow.add(Slide::simple_image_slide("cat"));
+    slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid", GREEN));
     slideshow.add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
 
-    slideshow.slides[1].background_colour = sf::Color(255, 0, 0, 255);
+    slideshow.slides[1].background_colour = RED;
+    slideshow.slides[0].background_colour = GREEN;
+    slideshow.slides[2].background_colour = WHITE;
 
     while (window.window->isOpen()) {
         sf::Event event;
@@ -228,7 +260,8 @@ int main() {
                         slideshow.previous_slide();
                         break;
                     case sf::Keyboard::F:
-                        // toggle_fullscreen(window)window->;
+                        window.toggle_fullscreen();
+                        slideshow.recenter_content();
                         break;
                     default:
                         break;
