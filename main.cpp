@@ -8,6 +8,8 @@
 
 using namespace std;
 
+void center_text(sf::Text &text, sf::RenderWindow &window);
+
 struct FontManager {
     map<string, sf::Font> fonts;
 
@@ -71,6 +73,7 @@ struct Slideshow {
                     auto text_content = current->text;
                     auto font = font_manager->get(current->font_name);
                     sf::Text text(text_content, font, 50);
+                    center_text(text, window);
                     window.draw(text);
                 break;
                 }
@@ -86,12 +89,13 @@ int main() {
     FontManager font_manager;
     font_manager.add("droid", "fonts/DroidSansMono.ttf");
 
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML window");
     window.setVerticalSyncEnabled(true);
 
     Slideshow slideshow(font_manager);
     slideshow.add(Slide::text_slide("Hello SFML", "droid"));
     slideshow.add(Slide::text_slide("Hello World!", "droid"));
+    slideshow.add(Slide::text_slide("Multi\nline\ntext", "droid"));
 
     while (window.isOpen()) {
         sf::Event event;
@@ -123,4 +127,19 @@ int main() {
     }
 
     return EXIT_SUCCESS;
+}
+
+
+
+void center_text(sf::Text &text, sf::RenderWindow &window) {
+    auto bounds = text.getGlobalBounds();
+    auto width = bounds.width;
+    auto height = bounds.height;
+
+    auto half_width = width / 2;
+    auto half_height = height / 2;
+    text.setOrigin(half_width, half_height);
+
+    auto window_dimensions = window.getSize();
+    text.setPosition(window_dimensions.x / 2, window_dimensions.y / 2);
 }
