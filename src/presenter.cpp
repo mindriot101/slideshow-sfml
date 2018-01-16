@@ -10,7 +10,7 @@ Presenter::Presenter() {
     image_manager.add("cat", "run_tree/images/cat.png");
 
     slideshow = new Slideshow(font_manager, image_manager);
-    /* setup_test_slideshow(); */
+    setup_test_slideshow();
 }
 
 Presenter::~Presenter() {
