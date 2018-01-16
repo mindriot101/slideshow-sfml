@@ -1,11 +1,16 @@
 #include "presenter.h"
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include "slideshow.h"
+
+using namespace std;
 
 Presenter::Presenter() {
     font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
     image_manager.add("cat", "run_tree/images/cat.png");
+
     slideshow = new Slideshow(font_manager, image_manager);
+    /* setup_test_slideshow(); */
 }
 
 Presenter::~Presenter() {
@@ -14,7 +19,7 @@ Presenter::~Presenter() {
     }
 }
 
-void Presenter::load_assets() {
+void Presenter::setup_test_slideshow() {
     slideshow->add(Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
     slideshow->add(Slide::simple_image_slide("cat", RED));
     slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid", GREEN, WHITE));
@@ -22,6 +27,11 @@ void Presenter::load_assets() {
 }
 
 int Presenter::run() {
+    if (slideshow->is_empty()) {
+        cerr << "Slideshow has no slides. Exiting." << endl;
+        return 1;
+    }
+
     while (window.window->isOpen()) {
         sf::Event event;
         while (window.window->pollEvent(event)) {

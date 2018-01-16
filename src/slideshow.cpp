@@ -69,3 +69,6 @@ void Slideshow::render_current_slide(sf::RenderWindow *window) {
 void Slideshow::recenter_content() {
 }
 
+bool Slideshow::is_empty() const {
+    return slides.size() == 0;
+}

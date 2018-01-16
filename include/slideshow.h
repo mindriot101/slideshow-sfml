@@ -17,6 +17,7 @@ struct Slideshow {
     void add(const Slide &slide);
     void render_current_slide(sf::RenderWindow *window);
     void recenter_content();
+    bool is_empty() const;
 
     inline void next_slide() { current_slide = std::min(current_slide + 1, uint32_t(slides.size() - 1)); }
     inline void previous_slide() {

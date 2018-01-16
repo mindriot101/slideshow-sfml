@@ -16,7 +16,7 @@ struct Presenter {
     Presenter();
     ~Presenter();
 
-    void load_assets();
+    void setup_test_slideshow();
 
     int run();
 };
