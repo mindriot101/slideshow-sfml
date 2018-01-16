@@ -30,14 +30,10 @@ int main() {
     MainWindow window;
 
     Slideshow slideshow(font_manager, image_manager);
-    slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid"));
-    slideshow.add(Slide::simple_image_slide("cat"));
-    slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid", GREEN));
+    slideshow.add(Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
+    slideshow.add(Slide::simple_image_slide("cat", RED));
+    slideshow.add(Slide::simple_centered_text_slide("Hello World!", "droid", GREEN, WHITE));
     slideshow.add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
-
-    slideshow.slides[1].background_colour = RED;
-    slideshow.slides[0].background_colour = GREEN;
-    slideshow.slides[2].background_colour = WHITE;
 
     while (window.window->isOpen()) {
         sf::Event event;
@@ -67,10 +63,7 @@ int main() {
             }
         }
 
-        window.window->clear();
-
         slideshow.render_current_slide(window.window);
-
         window.window->display();
     }
 

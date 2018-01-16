@@ -8,10 +8,10 @@
 
 struct Slide {
     std::vector<SlideComponent> components; 
-    sf::Color background_colour = sf::Color(0, 0, 0, 255);
+    sf::Color background_colour = sf::Color(0, 0, 0);
 
-    static Slide simple_centered_text_slide(const std::string &text, std::string font_name, sf::Color font_colour=WHITE);
-    static Slide simple_image_slide(const std::string &image_name);
+    static Slide simple_centered_text_slide(const std::string &text, std::string font_name, sf::Color font_colour=WHITE, sf::Color slide_background_colour=BLACK);
+    static Slide simple_image_slide(const std::string &image_name, sf::Color background_colour=BLACK);
 };
 
 #endif // SLIDE_H_
