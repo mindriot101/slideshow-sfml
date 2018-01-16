@@ -2,7 +2,7 @@ SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(SOURCES:.cpp=.o)
 CFLAGS := -Iinclude -I/usr/local/include
 LDFLAGS := -L/usr/local/lib -lsfml-system -lsfml-window -lsfml-graphics
-COMMON := -O2 -g -Wall -Wextra -std=c++14
+COMMON := -O0 -g -Wall -Wextra -std=c++14
 BIN := main
 
 all: $(BIN)
@@ -20,4 +20,7 @@ clean:
 run: $(BIN)
 	./$(BIN)
 
-.PHONY: all clean run
+debug: $(BIN)
+	lldb ./$(BIN)
+
+.PHONY: all clean run debug
