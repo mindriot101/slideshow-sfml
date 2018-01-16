@@ -9,14 +9,8 @@ Presenter::Presenter() {
     font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
     image_manager.add("cat", "run_tree/images/cat.png");
 
-    slideshow = new Slideshow(font_manager, image_manager);
+    slideshow = make_unique<Slideshow>(font_manager, image_manager);
     setup_test_slideshow();
-}
-
-Presenter::~Presenter() {
-    if (slideshow != nullptr) {
-        delete slideshow;
-    }
 }
 
 void Presenter::setup_test_slideshow() {

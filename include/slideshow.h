@@ -2,6 +2,7 @@
 #define SLIDESHOW_H_
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 #include "font_manager.h"
 #include "image_manager.h"
@@ -15,7 +16,7 @@ struct Slideshow {
 
     Slideshow(FontManager &font_manager, ImageManager &image_manager);
     void add(const Slide &slide);
-    void render_current_slide(sf::RenderWindow *window);
+    void render_current_slide(std::unique_ptr<sf::RenderWindow> &window);
     void recenter_content();
     bool is_empty() const;
 

@@ -31,7 +31,7 @@ Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager) {
 
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 
-void Slideshow::render_current_slide(sf::RenderWindow *window) {
+void Slideshow::render_current_slide(unique_ptr<sf::RenderWindow> &window) {
     Slide *current = &slides.at(current_slide);
 
     window->clear(current->background_colour);

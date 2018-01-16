@@ -3,18 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <memory>
 
 struct MainWindow {
-    sf::RenderWindow *window = nullptr;
+    std::unique_ptr<sf::RenderWindow> window;
     bool fullscreen = false;
 
     MainWindow();
-    ~MainWindow();
 
     void toggle_fullscreen();
-
-   private:
-    static sf::RenderWindow *create_window(bool fullscreen);
 };
 
 #endif  // MAIN_WINDOW_H_
