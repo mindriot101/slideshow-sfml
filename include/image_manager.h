@@ -1,9 +1,9 @@
 #ifndef IMAGE_MANAGER_H_
 #define IMAGE_MANAGER_H_
 
+#include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
-#include <SFML/Graphics.hpp>
 
 struct ImageManager {
     std::map<std::string, sf::Sprite> images;
@@ -12,4 +12,4 @@ struct ImageManager {
     sf::Sprite get(std::string name);
 };
 
-#endif // IMAGE_MANAGER_H_
+#endif  // IMAGE_MANAGER_H_

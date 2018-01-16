@@ -1,6 +1,6 @@
 #include "presenter.h"
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "slideshow.h"
 
 using namespace std;
@@ -20,10 +20,13 @@ Presenter::~Presenter() {
 }
 
 void Presenter::setup_test_slideshow() {
-    slideshow->add(Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
+    slideshow->add(
+        Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
     slideshow->add(Slide::simple_image_slide("cat", RED));
-    slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid", GREEN, WHITE));
-    slideshow->add(Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
+    slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid",
+                                                     GREEN, WHITE));
+    slideshow->add(
+        Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
 }
 
 int Presenter::run() {

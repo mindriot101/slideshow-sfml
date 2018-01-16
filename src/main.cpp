@@ -1,19 +1,19 @@
-#include <iostream>
-#include <vector>
-#include <cstdint>
-#include <string>
-#include <map>
-#include <algorithm>
 #include <SFML/Graphics.hpp>
+#include <algorithm>
+#include <cstdint>
+#include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
-#include "globals.h"
 #include "font_manager.h"
+#include "globals.h"
 #include "image_manager.h"
-#include "slide_component.h"
-#include "slide.h"
-#include "slideshow.h"
 #include "main_window.h"
 #include "presenter.h"
+#include "slide.h"
+#include "slide_component.h"
+#include "slideshow.h"
 
 using namespace std;
 

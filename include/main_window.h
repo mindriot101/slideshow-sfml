@@ -1,8 +1,8 @@
 #ifndef MAIN_WINDOW_H_
 #define MAIN_WINDOW_H_
 
-#include <iostream>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 struct MainWindow {
     sf::RenderWindow *window = nullptr;
@@ -13,9 +13,8 @@ struct MainWindow {
 
     void toggle_fullscreen();
 
-    private:
-
+   private:
     static sf::RenderWindow *create_window(bool fullscreen);
 };
 
-#endif // MAIN_WINDOW_H_
+#endif  // MAIN_WINDOW_H_

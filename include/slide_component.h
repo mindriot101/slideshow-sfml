@@ -1,8 +1,8 @@
 #ifndef SLIDE_COMPONENT_H_
 #define SLIDE_COMPONENT_H_
 
-#include <string>
 #include <SFML/Graphics.hpp>
+#include <string>
 #include "globals.h"
 
 enum class ComponentType {
@@ -25,8 +25,10 @@ struct SlideComponent {
     /* Image fields */
     std::string image_name;
 
-    static SlideComponent centered_text(const std::string &text, const std::string &font_name, sf::Color font_colour=WHITE); 
-    static SlideComponent centered_image(const std::string &image_name); 
+    static SlideComponent centered_text(const std::string &text,
+                                        const std::string &font_name,
+                                        sf::Color font_colour = WHITE);
+    static SlideComponent centered_image(const std::string &image_name);
 };
 
-#endif // SLIDE_COMPONENT_H_
+#endif  // SLIDE_COMPONENT_H_

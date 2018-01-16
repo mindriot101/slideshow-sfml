@@ -12,6 +12,4 @@ void FontManager::add(string name, string filename) {
     fonts[name] = font;
 }
 
-sf::Font FontManager::get(string name) {
-    return fonts[name];
-}
+sf::Font FontManager::get(string name) { return fonts[name]; }

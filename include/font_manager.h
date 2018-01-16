@@ -1,9 +1,9 @@
 #ifndef FONT_MANAGER_H_
 #define FONT_MANAGER_H_
 
+#include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
-#include <SFML/Graphics.hpp>
 
 struct FontManager {
     std::map<std::string, sf::Font> fonts;
@@ -12,4 +12,4 @@ struct FontManager {
     sf::Font get(std::string name);
 };
 
-#endif // FONT_MANAGER_H_
+#endif  // FONT_MANAGER_H_

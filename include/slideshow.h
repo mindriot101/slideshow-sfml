@@ -1,8 +1,8 @@
 #ifndef SLIDESHOW_H_
 #define SLIDESHOW_H_
 
-#include <vector>
 #include <algorithm>
+#include <vector>
 #include "font_manager.h"
 #include "image_manager.h"
 #include "slide.h"
@@ -19,7 +19,10 @@ struct Slideshow {
     void recenter_content();
     bool is_empty() const;
 
-    inline void next_slide() { current_slide = std::min(current_slide + 1, uint32_t(slides.size() - 1)); }
+    inline void next_slide() {
+        current_slide =
+            std::min(current_slide + 1, uint32_t(slides.size() - 1));
+    }
     inline void previous_slide() {
         if (current_slide > 0) {
             current_slide--;
@@ -27,4 +30,4 @@ struct Slideshow {
     }
 };
 
-#endif // SLIDESHOW_H_
+#endif  // SLIDESHOW_H_

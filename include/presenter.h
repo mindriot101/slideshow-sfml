@@ -21,4 +21,4 @@ struct Presenter {
     int run();
 };
 
-#endif // PRESENTER_H_
+#endif  // PRESENTER_H_

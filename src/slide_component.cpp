@@ -2,7 +2,9 @@
 
 using namespace std;
 
-SlideComponent SlideComponent::centered_text(const string &text, const string &font_name, sf::Color font_colour) {
+SlideComponent SlideComponent::centered_text(const string &text,
+                                             const string &font_name,
+                                             sf::Color font_colour) {
     SlideComponent component;
     component.text = text;
     component.component_type = ComponentType::TEXT;

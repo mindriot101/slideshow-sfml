@@ -17,6 +17,4 @@ void ImageManager::add(string name, string filename) {
     images[name] = sprite;
 }
 
-sf::Sprite ImageManager::get(string name) {
-    return images[name];
-}
+sf::Sprite ImageManager::get(string name) { return images[name]; }
