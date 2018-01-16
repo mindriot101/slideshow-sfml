@@ -1,8 +1,8 @@
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(SOURCES:.cpp=.o)
-CFLAGS := -I/usr/local/include
+CFLAGS := -Iinclude -I/usr/local/include
 LDFLAGS := -L/usr/local/lib -lsfml-system -lsfml-window -lsfml-graphics
-COMMON := -O0 -g -Wall -Wextra -std=c++14
+COMMON := -O2 -g -Wall -Wextra -std=c++14
 BIN := main
 
 all: $(BIN)
