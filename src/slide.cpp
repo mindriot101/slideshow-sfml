@@ -18,5 +18,6 @@ Slide Slide::simple_image_slide(const string &image_name, sf::Color background_c
     slide.background_colour = background_colour;
     SlideComponent component = SlideComponent::centered_image(image_name);
     slide.components.push_back(component);
+    slide.components.push_back(SlideComponent::centered_text("CAT!", "droid", BLACK));
     return slide;
 }
