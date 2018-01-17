@@ -1,21 +1,30 @@
 #include "presenter.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <sstream>
 #include "slideshow.h"
 
 using namespace std;
 
-Presenter::Presenter() {
+namespace {
+    string join_prefix(const string &prefix, const string &path) {
+        stringstream ss;
+        ss << prefix << "/" << path;
+        return ss.str();
+    }
+}
+
+Presenter::Presenter(const string &root_dir) {
     if (!sf::Shader::isAvailable()) {
         cerr << "Shaders not available on this platform. Cannot continue."
              << endl;
         exit(EXIT_FAILURE);
     }
 
-    font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
-    image_manager.add("cat", "run_tree/images/cat.png");
-    shader_manager.add("green", "run_tree/shaders/green.glslv",
-                       "run_tree/shaders/green.glslf");
+    font_manager.add("droid", join_prefix(root_dir, "run_tree/fonts/DroidSansMono.ttf"));
+    image_manager.add("cat", join_prefix(root_dir, "run_tree/images/cat.png"));
+    shader_manager.add("green", join_prefix(root_dir, "run_tree/shaders/green.glslv"),
+                       join_prefix(root_dir, "run_tree/shaders/green.glslf"));
 
     slideshow = make_unique<Slideshow>(font_manager, image_manager);
     setup_test_slideshow();

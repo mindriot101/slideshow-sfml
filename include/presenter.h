@@ -17,7 +17,7 @@ struct Presenter {
     MainWindow window;
     std::unique_ptr<Slideshow> slideshow;
 
-    Presenter();
+    Presenter(const std::string &root_dir);
 
     void setup_test_slideshow();
 

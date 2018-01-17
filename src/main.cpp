@@ -22,6 +22,6 @@ using namespace std;
 std::map<std::string, sf::Texture> TEXTURES;
 
 int main() {
-    Presenter presenter;
+    Presenter presenter("..");
     return presenter.run();
 }
