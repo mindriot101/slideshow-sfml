@@ -6,8 +6,16 @@
 using namespace std;
 
 Presenter::Presenter() {
+    if (!sf::Shader::isAvailable()) {
+        cerr << "Shaders not available on this platform. Cannot continue."
+             << endl;
+        exit(EXIT_FAILURE);
+    }
+
     font_manager.add("droid", "run_tree/fonts/DroidSansMono.ttf");
     image_manager.add("cat", "run_tree/images/cat.png");
+    shader_manager.add("green", "run_tree/shaders/green.glslv",
+                       "run_tree/shaders/green.glslf");
 
     slideshow = make_unique<Slideshow>(font_manager, image_manager);
     setup_test_slideshow();
