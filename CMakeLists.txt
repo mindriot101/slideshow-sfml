@@ -30,3 +30,6 @@ add_executable(${PROG}
 target_include_directories(${PROG} PRIVATE ${CMAKE_SOURCE_DIR}/include ${SFML_INCLUDE_DIR})
 target_compile_features(${PROG} PRIVATE cxx_std_14)
 target_link_libraries(${PROG} ${SFML_LIBRARIES})
+
+add_custom_target(run COMMAND ./${PROG} DEPENDS ${PROG})
+add_custom_target(debug COMMAND lldb ./${PROG} DEPENDS ${PROG})
