@@ -57,9 +57,10 @@ void print(const SlideComponent &c, int no) {
 
 }  // namespace
 
-Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager) {
+Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager) {
     this->font_manager = &font_manager;
     this->image_manager = &image_manager;
+    this->shader_manager = &shader_manager;
 }
 
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
@@ -81,14 +82,24 @@ void Slideshow::render_current_slide(unique_ptr<sf::RenderWindow> &window) {
                 reset_origin(text);
                 text.setPosition(component.x, component.y);
                 text.setFillColor(component.font_colour);
-                window->draw(text);
+                if (component.custom_shader) {
+                    auto shader = shader_manager->get(component.shader_name);
+                    window->draw(text, shader.get());
+                } else {
+                    window->draw(text);
+                }
                 break;
             }
             case ComponentType::IMAGE: {
                 auto sprite = image_manager->get(component.image_name);
                 reset_origin(sprite);
                 sprite.setPosition(component.x, component.y);
-                window->draw(sprite);
+                if (component.custom_shader) {
+                    auto shader = shader_manager->get(component.shader_name);
+                    window->draw(sprite, shader.get());
+                } else {
+                    window->draw(sprite);
+                }
                 break;
             }
         }

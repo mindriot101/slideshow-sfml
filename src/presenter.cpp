@@ -28,7 +28,7 @@ Presenter::Presenter(const string &root_dir) {
                        join_prefix(root_dir, "run_tree/shaders/green.glslv"),
                        join_prefix(root_dir, "run_tree/shaders/green.glslf"));
 
-    slideshow = make_unique<Slideshow>(font_manager, image_manager);
+    slideshow = make_unique<Slideshow>(font_manager, image_manager, shader_manager);
     setup_test_slideshow();
 }
 
@@ -37,7 +37,7 @@ void Presenter::setup_test_slideshow() {
         Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
     slideshow->add(Slide::simple_image_slide("cat", RED));
     slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid",
-                                                     GREEN, WHITE));
+                                                     WHITE, BLACK));
     slideshow->last()->last_component()->use_shader("green");
     slideshow->add(
         Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
