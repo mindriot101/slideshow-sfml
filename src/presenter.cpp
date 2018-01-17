@@ -7,12 +7,12 @@
 using namespace std;
 
 namespace {
-    string join_prefix(const string &prefix, const string &path) {
-        stringstream ss;
-        ss << prefix << "/" << path;
-        return ss.str();
-    }
+string join_prefix(const string &prefix, const string &path) {
+    stringstream ss;
+    ss << prefix << "/" << path;
+    return ss.str();
 }
+}  // namespace
 
 Presenter::Presenter(const string &root_dir) {
     if (!sf::Shader::isAvailable()) {
@@ -21,9 +21,11 @@ Presenter::Presenter(const string &root_dir) {
         exit(EXIT_FAILURE);
     }
 
-    font_manager.add("droid", join_prefix(root_dir, "run_tree/fonts/DroidSansMono.ttf"));
+    font_manager.add("droid",
+                     join_prefix(root_dir, "run_tree/fonts/DroidSansMono.ttf"));
     image_manager.add("cat", join_prefix(root_dir, "run_tree/images/cat.png"));
-    shader_manager.add("green", join_prefix(root_dir, "run_tree/shaders/green.glslv"),
+    shader_manager.add("green",
+                       join_prefix(root_dir, "run_tree/shaders/green.glslv"),
                        join_prefix(root_dir, "run_tree/shaders/green.glslf"));
 
     slideshow = make_unique<Slideshow>(font_manager, image_manager);
