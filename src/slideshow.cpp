@@ -66,6 +66,8 @@ Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, Sha
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 
 void Slideshow::render_current_slide(unique_ptr<sf::RenderWindow> &window) {
+    auto res = window->getSize();
+
     Slide *current = &slides.at(current_slide);
 
     window->clear(current->background_colour);
@@ -80,7 +82,7 @@ void Slideshow::render_current_slide(unique_ptr<sf::RenderWindow> &window) {
 
                 sf::Text text(text_content, font, 84);
                 reset_origin(text);
-                text.setPosition(component.x, component.y);
+                text.setPosition(component.x * res.x, component.y * res.y);
                 text.setFillColor(component.font_colour);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
@@ -93,7 +95,7 @@ void Slideshow::render_current_slide(unique_ptr<sf::RenderWindow> &window) {
             case ComponentType::IMAGE: {
                 auto sprite = image_manager->get(component.image_name);
                 reset_origin(sprite);
-                sprite.setPosition(component.x, component.y);
+                sprite.setPosition(component.x * res.x, component.y * res.y);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
                     window->draw(sprite, shader.get());

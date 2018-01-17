@@ -15,6 +15,7 @@ struct Slideshow {
     FontManager *font_manager;
     ImageManager *image_manager;
     ShaderManager *shader_manager;
+    float scaling_factor = 1.0f;
 
     Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager);
     void add(const Slide &slide);

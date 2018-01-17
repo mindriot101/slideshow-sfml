@@ -10,8 +10,8 @@ SlideComponent SlideComponent::centered_text(const string &text,
     component.component_type = ComponentType::TEXT;
     component.font_name = font_name;
     component.font_colour = font_colour;
-    component.x = WINDOW_WIDTH / 2;
-    component.y = WINDOW_HEIGHT / 2;
+    component.x = 0.5;
+    component.y = 0.5;
 
     return component;
 }
@@ -20,8 +20,8 @@ SlideComponent SlideComponent::centered_image(const string &image_name) {
     SlideComponent component;
     component.image_name = image_name;
     component.component_type = ComponentType::IMAGE;
-    component.x = WINDOW_WIDTH / 2;
-    component.y = WINDOW_HEIGHT / 2;
+    component.x = 0.5;
+    component.y = 0.5;
     return component;
 }
 

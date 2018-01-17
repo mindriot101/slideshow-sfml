@@ -13,8 +13,8 @@ enum class ComponentType {
 
 struct SlideComponent {
     /* General fields */
-    int x;
-    int y;
+    float x;
+    float y;
     ComponentType component_type = ComponentType::NONE;
     std::string shader_name;
     bool custom_shader = false;
