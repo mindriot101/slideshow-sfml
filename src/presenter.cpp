@@ -27,6 +27,7 @@ void Presenter::setup_test_slideshow() {
     slideshow->add(Slide::simple_image_slide("cat", RED));
     slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid",
                                                      GREEN, WHITE));
+    slideshow->last()->last_component()->use_shader("green");
     slideshow->add(
         Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
 }
@@ -36,6 +37,8 @@ int Presenter::run() {
         cerr << "Slideshow has no slides. Exiting." << endl;
         return 1;
     }
+
+    slideshow->print_current(slideshow->current_slide);
 
     while (window.window->isOpen()) {
         sf::Event event;

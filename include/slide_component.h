@@ -16,6 +16,8 @@ struct SlideComponent {
     int x;
     int y;
     ComponentType component_type = ComponentType::NONE;
+    std::string shader_name;
+    bool custom_shader = false;
 
     /* Text fields */
     std::string text;
@@ -24,6 +26,8 @@ struct SlideComponent {
 
     /* Image fields */
     std::string image_name;
+
+    void use_shader(const std::string &shader_name);
 
     static SlideComponent centered_text(const std::string &text,
                                         const std::string &font_name,

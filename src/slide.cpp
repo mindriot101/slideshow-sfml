@@ -26,3 +26,12 @@ Slide Slide::simple_image_slide(const string &image_name,
         SlideComponent::centered_text("CAT!", "droid", BLACK));
     return slide;
 }
+
+SlideComponent *Slide::last_component() {
+    size_t len = components.size();
+    if (len > 0) {
+        return &components[len - 1];
+    }
+
+    return nullptr;
+}

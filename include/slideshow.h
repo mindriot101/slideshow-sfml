@@ -17,18 +17,14 @@ struct Slideshow {
     Slideshow(FontManager &font_manager, ImageManager &image_manager);
     void add(const Slide &slide);
     void render_current_slide(std::unique_ptr<sf::RenderWindow> &window);
+    Slide *last();
     void recenter_content();
     bool is_empty() const;
 
-    inline void next_slide() {
-        current_slide =
-            std::min(current_slide + 1, uint32_t(slides.size() - 1));
-    }
-    inline void previous_slide() {
-        if (current_slide > 0) {
-            current_slide--;
-        }
-    }
+    void next_slide();
+    void previous_slide();
+
+    void print_current(int current_slide);
 };
 
 #endif  // SLIDESHOW_H_

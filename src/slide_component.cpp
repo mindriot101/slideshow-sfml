@@ -24,3 +24,8 @@ SlideComponent SlideComponent::centered_image(const string &image_name) {
     component.y = WINDOW_HEIGHT / 2;
     return component;
 }
+
+void SlideComponent::use_shader(const string &shader_name) {
+    this->shader_name = shader_name;
+    this->custom_shader = true;
+}
