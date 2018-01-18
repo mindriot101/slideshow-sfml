@@ -79,7 +79,7 @@ int Presenter::run() {
             }
         }
 
-        slideshow->render_current_slide(window.window);
+        slideshow->render_current_slide(window);
         window.window->display();
     }
 

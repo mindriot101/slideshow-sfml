@@ -8,6 +8,8 @@
 struct MainWindow {
     std::unique_ptr<sf::RenderWindow> window;
     bool fullscreen = false;
+    unsigned int window_width = 0;
+    unsigned int window_height = 0;
 
     MainWindow();
 

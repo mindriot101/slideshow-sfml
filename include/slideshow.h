@@ -6,6 +6,7 @@
 #include <vector>
 #include "font_manager.h"
 #include "shader_manager.h"
+#include "main_window.h"
 #include "image_manager.h"
 #include "slide.h"
 
@@ -19,7 +20,7 @@ struct Slideshow {
 
     Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager);
     void add(const Slide &slide);
-    void render_current_slide(std::unique_ptr<sf::RenderWindow> &window);
+    void render_current_slide(const MainWindow &main_window);
     Slide *last();
     void recenter_content();
     bool is_empty() const;
