@@ -68,6 +68,7 @@ void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 void Slideshow::render_current_slide(const MainWindow &main_window) {
     auto res = main_window.window->getSize();
 
+    auto scaling = main_window.scaling_factor;
     Slide *current = &slides.at(current_slide);
 
     main_window.window->clear(current->background_colour);
@@ -84,6 +85,7 @@ void Slideshow::render_current_slide(const MainWindow &main_window) {
                 reset_origin(text);
                 text.setPosition(component.x * res.x, component.y * res.y);
                 text.setFillColor(component.font_colour);
+                text.setScale(scaling, scaling);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
                     main_window.window->draw(text, shader.get());
@@ -96,6 +98,7 @@ void Slideshow::render_current_slide(const MainWindow &main_window) {
                 auto sprite = image_manager->get(component.image_name);
                 reset_origin(sprite);
                 sprite.setPosition(component.x * res.x, component.y * res.y);
+                sprite.setScale(scaling, scaling);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
                     main_window.window->draw(sprite, shader.get());

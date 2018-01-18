@@ -18,4 +18,5 @@ void MainWindow::toggle_fullscreen() {
     window->create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Presentation",
                    style);
     auto res = window->getSize();
+    scaling_factor = res.x / float(window_width);
 }

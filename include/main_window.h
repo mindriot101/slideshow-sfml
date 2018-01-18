@@ -10,6 +10,7 @@ struct MainWindow {
     bool fullscreen = false;
     unsigned int window_width = 0;
     unsigned int window_height = 0;
+    float scaling_factor = 1.0f;
 
     MainWindow();
 
