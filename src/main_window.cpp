@@ -15,8 +15,14 @@ void MainWindow::toggle_fullscreen() {
     fullscreen = !fullscreen;
     auto style = fullscreen ? sf::Style::Default | sf::Style::Fullscreen
                             : sf::Style::Default;
-    window->create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Presentation",
-                   style);
-    auto res = window->getSize();
-    scaling_factor = res.x / float(window_width);
+
+    sf::VideoMode mode;
+    if (fullscreen) {
+        mode = sf::VideoMode::getDesktopMode();
+    } else {
+        mode = sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+    }
+
+    window->create(mode, "Presentation", style);
+    scaling_factor = mode.width / float(window_width);
 }
