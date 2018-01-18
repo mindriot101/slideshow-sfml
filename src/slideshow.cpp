@@ -81,11 +81,10 @@ void Slideshow::render_current_slide(const MainWindow &main_window) {
                 auto text_content = component.text;
                 auto font = font_manager->get(component.font_name);
 
-                sf::Text text(text_content, font, 84);
+                sf::Text text(text_content, font, 84 * scaling);
                 reset_origin(text);
                 text.setPosition(component.x * res.x, component.y * res.y);
                 text.setFillColor(component.font_colour);
-                text.setScale(scaling, scaling);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
                     main_window.window->draw(text, shader.get());
