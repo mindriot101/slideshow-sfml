@@ -1,0 +1,21 @@
+{
+    "resolution": {
+        "width": 1280,
+        "height": 720
+    },
+    "slides": [
+        {
+            "background_colour": [0, 255, 0],
+            "components": [
+                {
+                    "type": "text",
+                    "text": "Hello SFML",
+                    "font": "droid",
+                    "colour": [255, 255, 255],
+                    "x": 0.5,
+                    "y": 0.5
+                }
+            ]
+        }
+    ]
+}
