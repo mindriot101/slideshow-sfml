@@ -88,6 +88,7 @@ void Slideshow::render_current_slide(const MainWindow &main_window, const Time &
                 text.setFillColor(component.font_colour);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
+                    shader->setUniform("t", time.total);
                     main_window.window->draw(text, shader.get());
                 } else {
                     main_window.window->draw(text);
@@ -101,6 +102,7 @@ void Slideshow::render_current_slide(const MainWindow &main_window, const Time &
                 sprite.setScale(scaling, scaling);
                 if (component.custom_shader) {
                     auto shader = shader_manager->get(component.shader_name);
+                    shader->setUniform("t", time.total);
                     main_window.window->draw(sprite, shader.get());
                 } else {
                     main_window.window->draw(sprite);
