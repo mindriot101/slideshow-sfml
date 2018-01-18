@@ -9,6 +9,7 @@
 #include "main_window.h"
 #include "image_manager.h"
 #include "slide.h"
+#include "presenter_time.h"
 
 struct Slideshow {
     std::vector<Slide> slides;
@@ -20,7 +21,7 @@ struct Slideshow {
 
     Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager);
     void add(const Slide &slide);
-    void render_current_slide(const MainWindow &main_window);
+    void render_current_slide(const MainWindow &main_window, const Time &time);
     Slide *last();
     void recenter_content();
     bool is_empty() const;

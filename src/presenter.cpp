@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include "slideshow.h"
+#include "presenter_time.h"
 
 using namespace std;
 
@@ -51,6 +52,8 @@ int Presenter::run() {
 
     slideshow->print_current(slideshow->current_slide);
 
+    sf::Clock clock;
+    float seconds = 0;
     while (window.window->isOpen()) {
         sf::Event event;
         while (window.window->pollEvent(event)) {
@@ -79,7 +82,11 @@ int Presenter::run() {
             }
         }
 
-        slideshow->render_current_slide(window);
+        auto elapsed = clock.restart();
+        seconds += elapsed.asSeconds();
+
+        Time time{elapsed.asSeconds(), seconds};
+        slideshow->render_current_slide(window, time);
         window.window->display();
     }
 

@@ -1,6 +1,7 @@
 #include "slideshow.h"
 #include <iostream>
 #include <sstream>
+#include "presenter_time.h"
 
 using namespace std;
 
@@ -65,7 +66,7 @@ Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, Sha
 
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 
-void Slideshow::render_current_slide(const MainWindow &main_window) {
+void Slideshow::render_current_slide(const MainWindow &main_window, const Time &time) {
     auto res = main_window.window->getSize();
 
     auto scaling = main_window.scaling_factor;
