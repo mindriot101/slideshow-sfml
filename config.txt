@@ -15,4 +15,6 @@ text "Hello SFML" droid 255 255 255 0.5 0.5
 new_slide
 
 background_colour 255 0 0
-text "Second slide" droid 0 0 255 0.5 0.5
+text "This is a\ngood slide" droid 0 0 255 0.5 0.5
+
+end_slideshow

@@ -6,6 +6,7 @@
 #include "image_manager.h"
 #include "main_window.h"
 #include "shader_manager.h"
+#include "slide.h"
 #include "config.h"
 
 struct Slideshow;
@@ -20,8 +21,7 @@ struct Presenter {
 
     Presenter();
 
-    void setup_test_slideshow();
-    void handle_line(const std::string &line, ConfigSection &section, unsigned int &slide_counter);
+    void handle_line(const std::string &line, ConfigSection &section, Slide &current);
     void parse_config(const std::string &filename);
 
     int run();

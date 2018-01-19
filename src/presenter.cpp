@@ -28,6 +28,32 @@ namespace {
             return out;
         }
 
+    string parse_slide_text(const string &line, int *next_pos) {
+        stringstream ss;
+        bool collecting = false;
+        for (auto c: line) {
+            if (!collecting && (c == '"')) {
+                collecting = true;
+                continue;
+            }
+
+            if (collecting && (c == ' ')) {
+                (*next_pos)++;
+            }
+
+            if (collecting && (c != '"')) {
+                ss << c;
+            }
+
+            if (collecting && (c == '"')) {
+                (*next_pos)++;
+                break;
+            }
+        }
+
+        return ss.str();
+    }
+
 }  // namespace
 
 Presenter::Presenter() {
@@ -41,12 +67,6 @@ Presenter::Presenter() {
 
     auto config_filename = "../config.txt";
     parse_config(config_filename);
-
-    /* shader_manager.add("green", */
-    /*                    join_prefix(root_dir, "run_tree/shaders/green.glslv"), */
-    /*                    join_prefix(root_dir, "run_tree/shaders/green.glslf")); */
-
-    setup_test_slideshow();
 }
 
 void Presenter::parse_config(const string &filename) {
@@ -54,17 +74,17 @@ void Presenter::parse_config(const string &filename) {
     string line;
 
     ConfigSection section = ConfigSection::Defaults;
-    unsigned int slide_counter = 0;
+    Slide current;
 
     while (getline(ifs, line)) {
         if (line.empty() || line == "\n") {
             continue;
         }
-        handle_line(line, section, slide_counter);
+        handle_line(line, section, current);
     }
 }
 
-void Presenter::handle_line(const string &line, ConfigSection &section, unsigned int &slide_counter) {
+void Presenter::handle_line(const string &line, ConfigSection &section, Slide &current) {
     istringstream iss(line);
     vector<string> tokens{istream_iterator<string>(iss),
         istream_iterator<string>()};
@@ -73,12 +93,6 @@ void Presenter::handle_line(const string &line, ConfigSection &section, unsigned
     vector<string> valid_tokens = take_while(tokens, [](string token) { return token != "#"; });
     if (valid_tokens.empty()) {
         return;
-    }
-
-    if (section != ConfigSection::Defaults) {
-        cout << "--- SLIDE " << slide_counter << ": ";
-    } else {
-        cout << "---       " << slide_counter << ": ";
     }
 
     for (auto key: valid_tokens) {
@@ -101,12 +115,15 @@ void Presenter::handle_line(const string &line, ConfigSection &section, unsigned
         window = make_unique<MainWindow>(width, height);
 
     } else if (tag == "background_colour") {
+        auto r = atoi(valid_tokens.at(1).c_str());
+        auto g = atoi(valid_tokens.at(2).c_str());
+        auto b = atoi(valid_tokens.at(3).c_str());
+        auto colour = sf::Color(r, g, b);
 
         if (section == ConfigSection::Defaults) {
-            slideshow->default_background_colour.r = atoi(valid_tokens.at(1).c_str());
-            slideshow->default_background_colour.g = atoi(valid_tokens.at(2).c_str());
-            slideshow->default_background_colour.b = atoi(valid_tokens.at(3).c_str());
+            slideshow->default_background_colour = colour;
         } else {
+            current.background_colour = colour;
         }
 
     } else if (tag == "font") {
@@ -155,29 +172,39 @@ void Presenter::handle_line(const string &line, ConfigSection &section, unsigned
             exit(EXIT_FAILURE);
         }
 
-        /* TODO */
+        /* Need to do something to handle the text */
+        int next_pos = 1;
+        cout << next_pos << endl;
+        auto text = parse_slide_text(line, &next_pos);
+        cout << next_pos << endl;
+
+        auto font_name = valid_tokens.at(next_pos++);
+        sf::Color font_colour;
+        font_colour.r = atoi(valid_tokens.at(next_pos++).c_str());
+        font_colour.g = atoi(valid_tokens.at(next_pos++).c_str());
+        font_colour.b = atoi(valid_tokens.at(next_pos++).c_str());
+
+        auto component = SlideComponent::centered_text(text, font_name, font_colour);
+        component.x = atof(valid_tokens.at(next_pos++).c_str());
+        component.y = atof(valid_tokens.at(next_pos++).c_str());
+
+        current.components.push_back(component);
 
     } else if (tag == "new_slide") {
         if (section != ConfigSection::Slides) {
             cerr << "New slide declaration belongs in a slide definition" << endl;
             exit(EXIT_FAILURE);
         } 
-        slide_counter += 1;
+        slideshow->add(current);
+        current = {};
+
+    } else if (tag == "end_slideshow") {
+        slideshow->add(current);
+        current = {};
     } else {
         cerr << "Unhandled tag: " << tag << endl;
         exit(EXIT_FAILURE);
     }
-}
-
-void Presenter::setup_test_slideshow() {
-    slideshow->add(
-            Slide::simple_centered_text_slide("Hello SFML", "droid", WHITE, GREEN));
-    slideshow->add(Slide::simple_image_slide("cat", RED));
-    slideshow->add(Slide::simple_centered_text_slide("Hello World!", "droid",
-                WHITE, BLACK));
-    slideshow->last()->last_component()->use_shader("green");
-    slideshow->add(
-            Slide::simple_centered_text_slide("Multi\nline\ntext", "droid"));
 }
 
 int Presenter::run() {
