@@ -2,6 +2,11 @@
 resolution 1280 720
 background_colour 255 255 255
 
+# Set up resources
+font droid ../run_tree/fonts/DroidSansMono.ttf
+image cat ../run_tree/images/cat.png
+shader green ../run_tree/shaders/green.glslv ../run_tree/shaders/green.glslf
+
 slides
 
 background_colour 0 255 0

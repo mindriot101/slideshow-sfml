@@ -8,8 +8,6 @@
 #include <streambuf>
 #include <vector>
 
-#include "picojson.h"
-
 #include "font_manager.h"
 #include "globals.h"
 #include "image_manager.h"
@@ -18,6 +16,7 @@
 #include "slide.h"
 #include "slide_component.h"
 #include "slideshow.h"
+#include "config.h"
 
 using namespace std;
 
@@ -25,21 +24,10 @@ using namespace std;
  * or else we lose the texture content when making sprites */
 std::map<std::string, sf::Texture> TEXTURES;
 
-struct Config {
-    struct Resolution {
-        int width;
-        int height;
-    };
-
-    Resolution resolution;
-};
-
 int main() {
 
-    /* Parse the config */
+    auto config = Config::parse("../config.txt");
 
-    return 0;
-
-    Presenter presenter("..");
+    Presenter presenter(config);
     return presenter.run();
 }

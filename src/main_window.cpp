@@ -3,7 +3,7 @@
 
 using namespace std;
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(const Config &config) {
     sf::ContextSettings settings;
     settings.majorVersion = 2;
     settings.minorVersion = 1;

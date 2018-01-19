@@ -21,7 +21,7 @@ struct Slideshow {
 
     Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager);
     void add(const Slide &slide);
-    void render_current_slide(const MainWindow &main_window, const Time &time);
+    void render_current_slide(const std::unique_ptr<MainWindow> &main_window, const Time &time);
     Slide *last();
     void recenter_content();
     bool is_empty() const;

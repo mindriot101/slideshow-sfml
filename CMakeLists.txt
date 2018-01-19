@@ -12,6 +12,7 @@ project(Presenter)
 find_package(SFML 2.4 COMPONENTS system window graphics)
 
 add_executable(${PROG}
+    src/config.cpp
     src/font_manager.cpp
     src/image_manager.cpp
     src/main.cpp
@@ -21,6 +22,7 @@ add_executable(${PROG}
     src/slide.cpp
     src/slide_component.cpp
     src/slideshow.cpp
+    include/config.h
     include/font_manager.h
     include/globals.h
     include/image_manager.h

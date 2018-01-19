@@ -15,22 +15,26 @@ string join_prefix(const string &prefix, const string &path) {
 }
 }  // namespace
 
-Presenter::Presenter(const string &root_dir) {
+Presenter::Presenter(const Config &config) {
     if (!sf::Shader::isAvailable()) {
         cerr << "Shaders not available on this platform. Cannot continue."
              << endl;
         exit(EXIT_FAILURE);
     }
 
-    font_manager.add("droid",
-                     join_prefix(root_dir, "run_tree/fonts/DroidSansMono.ttf"));
-    image_manager.add("cat", join_prefix(root_dir, "run_tree/images/cat.png"));
-    shader_manager.add("green",
-                       join_prefix(root_dir, "run_tree/shaders/green.glslv"),
-                       join_prefix(root_dir, "run_tree/shaders/green.glslf"));
-
     slideshow = make_unique<Slideshow>(font_manager, image_manager, shader_manager);
-    setup_test_slideshow();
+    window = make_unique<MainWindow>(config);
+
+    exit(0);
+
+    /* font_manager.add("droid", */
+    /*                  join_prefix(root_dir, "run_tree/fonts/DroidSansMono.ttf")); */
+    /* image_manager.add("cat", join_prefix(root_dir, "run_tree/images/cat.png")); */
+    /* shader_manager.add("green", */
+    /*                    join_prefix(root_dir, "run_tree/shaders/green.glslv"), */
+    /*                    join_prefix(root_dir, "run_tree/shaders/green.glslf")); */
+
+    // setup_test_slideshow();
 }
 
 void Presenter::setup_test_slideshow() {
@@ -54,15 +58,15 @@ int Presenter::run() {
 
     sf::Clock clock;
     float seconds = 0;
-    while (window.window->isOpen()) {
+    while (window->window->isOpen()) {
         sf::Event event;
-        while (window.window->pollEvent(event)) {
+        while (window->window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.window->close();
+                window->window->close();
             } else if (event.type == sf::Event::KeyReleased) {
                 switch (event.key.code) {
                     case sf::Keyboard::Q:
-                        window.window->close();
+                        window->window->close();
                         break;
                     case sf::Keyboard::N:
                     case sf::Keyboard::Space:
@@ -73,7 +77,7 @@ int Presenter::run() {
                         slideshow->previous_slide();
                         break;
                     case sf::Keyboard::F:
-                        window.toggle_fullscreen();
+                        window->toggle_fullscreen();
                         slideshow->recenter_content();
                         break;
                     default:
@@ -87,7 +91,7 @@ int Presenter::run() {
 
         Time time{elapsed.asSeconds(), seconds};
         slideshow->render_current_slide(window, time);
-        window.window->display();
+        window->window->display();
     }
 
     return 0;

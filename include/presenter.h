@@ -6,6 +6,7 @@
 #include "image_manager.h"
 #include "main_window.h"
 #include "shader_manager.h"
+#include "config.h"
 
 struct Slideshow;
 
@@ -14,10 +15,10 @@ struct Presenter {
     ImageManager image_manager;
     ShaderManager shader_manager;
 
-    MainWindow window;
+    std::unique_ptr<MainWindow> window;
     std::unique_ptr<Slideshow> slideshow;
 
-    Presenter(const std::string &root_dir);
+    Presenter(const Config &config);
 
     void setup_test_slideshow();
 
