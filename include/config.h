@@ -4,6 +4,14 @@
 #include <string>
 
 struct Config {
+
+    struct Resolution {
+        int width;
+        int height;
+    };
+
+    Resolution res;
+
     static Config parse(const std::string &filename);
 };
 
