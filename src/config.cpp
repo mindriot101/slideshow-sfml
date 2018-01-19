@@ -29,7 +29,7 @@ namespace {
             return out;
         }
 
-    void handle_line(const string &line, Config &config, ConfigSection &section) {
+    void handle_line(const string &line, Config &config, ConfigSection &section, unsigned int &slide_counter) {
         istringstream iss(line);
         vector<string> tokens{istream_iterator<string>(iss),
                               istream_iterator<string>()};
@@ -40,7 +40,12 @@ namespace {
             return;
         }
 
-        cout << "--- ";
+        if (section != ConfigSection::Defaults) {
+            cout << "--- SLIDE " << slide_counter << ": ";
+        } else {
+            cout << "---       " << slide_counter << ": ";
+        }
+
         for (auto key: valid_tokens) {
             cout << key << " ";
         }
@@ -76,6 +81,13 @@ namespace {
                 cerr << "Text definition belongs in a slide definition" << endl;
                 exit(EXIT_FAILURE);
             }
+        } else if (tag == "new_slide") {
+            if (section != ConfigSection::Slides) {
+                cerr << "New slide declaration belongs in a slide definition" << endl;
+                exit(EXIT_FAILURE);
+            }
+
+            slide_counter += 1;
         } else {
             cerr << "Unhandled tag: " << tag << endl;
             exit(EXIT_FAILURE);
@@ -90,12 +102,13 @@ Config Config::parse(const string &filename) {
     string line;
 
     ConfigSection section = ConfigSection::Defaults;
+    unsigned int slide_counter = 0;
 
     while (getline(ifs, line)) {
         if (line.empty() || line == "\n") {
             continue;
         }
-        handle_line(line, config, section);
+        handle_line(line, config, section, slide_counter);
     }
 
     exit(0);
