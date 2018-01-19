@@ -25,22 +25,18 @@ using namespace std;
  * or else we lose the texture content when making sprites */
 std::map<std::string, sf::Texture> TEXTURES;
 
+struct Config {
+    struct Resolution {
+        int width;
+        int height;
+    };
+
+    Resolution resolution;
+};
 
 int main() {
 
-    /* Parse the toml code */
-    auto filename = "../config.json";
-    ifstream ifs(filename);
-    string text((istreambuf_iterator<char>(ifs)),
-                 istreambuf_iterator<char>());
-
-    picojson::value v;
-    auto err = picojson::parse(v, text);
-    if (!err.empty()) {
-        cerr << err << endl;
-        return EXIT_FAILURE;
-    }
-
+    /* Parse the config */
 
     return 0;
 
