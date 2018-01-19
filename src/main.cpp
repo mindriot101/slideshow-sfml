@@ -26,8 +26,6 @@ std::map<std::string, sf::Texture> TEXTURES;
 
 int main() {
 
-    auto config = Config::parse("../config.txt");
-
-    Presenter presenter(config);
+    Presenter presenter;
     return presenter.run();
 }

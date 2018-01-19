@@ -18,9 +18,11 @@ struct Presenter {
     std::unique_ptr<MainWindow> window;
     std::unique_ptr<Slideshow> slideshow;
 
-    Presenter(const Config &config);
+    Presenter();
 
     void setup_test_slideshow();
+    void handle_line(const std::string &line, ConfigSection &section, unsigned int &slide_counter);
+    void parse_config(const std::string &filename);
 
     int run();
 };

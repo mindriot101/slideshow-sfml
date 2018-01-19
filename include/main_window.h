@@ -13,7 +13,7 @@ struct MainWindow {
     unsigned int window_height = 0;
     float scaling_factor = 1.0f;
 
-    MainWindow(const Config &config);
+    MainWindow(int width, int height);
 
     void toggle_fullscreen();
 };

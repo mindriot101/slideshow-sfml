@@ -2,17 +2,11 @@
 #define CONFIG_H_
 
 #include <string>
+#include <SFML/Graphics.hpp>
 
-struct Config {
-
-    struct Resolution {
-        int width;
-        int height;
-    };
-
-    Resolution res;
-
-    static Config parse(const std::string &filename);
+enum class ConfigSection {
+    Defaults,
+    Slides,
 };
 
 #endif // CONFIG_H_
