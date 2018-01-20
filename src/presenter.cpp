@@ -69,22 +69,24 @@ Presenter::Presenter() {
     parse_config(config_filename);
 }
 
+
 void Presenter::parse_config(const string &filename) {
     ifstream ifs(filename);
     string line;
 
     ConfigSection section = ConfigSection::Defaults;
     Slide current;
+    Option<string> current_shader = Option<string>::None();;
 
     while (getline(ifs, line)) {
         if (line.empty() || line == "\n") {
             continue;
         }
-        handle_line(line, section, current);
+        handle_line(line, section, current, current_shader);
     }
 }
 
-void Presenter::handle_line(const string &line, ConfigSection &section, Slide &current) {
+void Presenter::handle_line(const string &line, ConfigSection &section, Slide &current, Option<string> &current_shader) {
     istringstream iss(line);
     vector<string> tokens{istream_iterator<string>(iss),
         istream_iterator<string>()};
@@ -189,6 +191,37 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
         component.y = atof(valid_tokens.at(next_pos++).c_str());
 
         current.components.push_back(component);
+
+    } else if (tag == "with") {
+        if (section != ConfigSection::Slides) {
+            cerr << "Shader definition belongs in a slide definition" << endl;
+            exit(EXIT_FAILURE);
+        }
+
+        if (valid_tokens.at(1) != "shader") {
+            cerr << "`with` command should be followed by `shader`" << endl;
+            exit(EXIT_FAILURE);
+        }
+
+        auto shader_name = valid_tokens.at(2);
+        current_shader = Option<string>::Some(shader_name);
+
+    } else if (tag == "endwith") {
+        if (section != ConfigSection::Slides) {
+            cerr << "`endwith` statement belongs in a slide definition" << endl;
+            exit(EXIT_FAILURE);
+        } 
+
+        /* Attach the current shader to the previous component */
+        if (!current_shader) {
+            cerr << "No shader has been set. This should not happen" << endl;
+            exit(EXIT_FAILURE);
+        }
+
+        auto comp = current.last_component();
+        comp->shader_name = current_shader.value;
+        comp->custom_shader = true;
+        current_shader = Option<string>::None();
 
     } else if (tag == "new_slide") {
         if (section != ConfigSection::Slides) {

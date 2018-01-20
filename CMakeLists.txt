@@ -33,7 +33,7 @@ add_executable(${PROG}
     include/slideshow.h)
 
 target_include_directories(${PROG} PRIVATE ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/vendor/include ${SFML_INCLUDE_DIR})
-target_compile_features(${PROG} PRIVATE cxx_std_14)
+target_compile_features(${PROG} PRIVATE cxx_std_17)
 target_link_libraries(${PROG} ${SFML_LIBRARIES})
 
 add_custom_target(run COMMAND ./${PROG} DEPENDS ${PROG})
