@@ -26,6 +26,5 @@ SlideComponent SlideComponent::centered_image(const string &image_name) {
 }
 
 void SlideComponent::use_shader(const string &shader_name) {
-    this->shader_name = shader_name;
-    this->custom_shader = true;
+    this->shader_name = Option<string>::Some(shader_name);
 }

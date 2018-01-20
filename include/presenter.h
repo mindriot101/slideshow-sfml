@@ -2,10 +2,13 @@
 #define PRESENTER_H_
 
 #include <memory>
+#include "config.h"
 #include "font_manager.h"
 #include "image_manager.h"
 #include "main_window.h"
+#include "option.h"
 #include "shader_manager.h"
+#include "slide.h"
 
 struct Slideshow;
 
@@ -14,12 +17,14 @@ struct Presenter {
     ImageManager image_manager;
     ShaderManager shader_manager;
 
-    MainWindow window;
+    std::unique_ptr<MainWindow> window;
     std::unique_ptr<Slideshow> slideshow;
 
-    Presenter(const std::string &root_dir);
+    Presenter();
 
-    void setup_test_slideshow();
+    void handle_line(const std::string &line, ConfigSection &section,
+                     Slide &current, Option<std::string> &current_shader);
+    void parse_config(const std::string &filename);
 
     int run();
 };

@@ -35,8 +35,8 @@ string colour_to_string(const sf::Color &colour) {
 void print(const SlideComponent &c, int no) {
     cout << "  - Component: " << no << endl;
 
-    if (c.custom_shader) {
-        cout << "    - Shader name: " << c.shader_name << endl;
+    if (c.shader_name) {
+        cout << "    - Shader name: " << c.shader_name.value << endl;
     } else {
         cout << "    - No shader" << endl;
     }
@@ -58,7 +58,8 @@ void print(const SlideComponent &c, int no) {
 
 }  // namespace
 
-Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager) {
+Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager,
+                     ShaderManager &shader_manager) {
     this->font_manager = &font_manager;
     this->image_manager = &image_manager;
     this->shader_manager = &shader_manager;
@@ -66,13 +67,14 @@ Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, Sha
 
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 
-void Slideshow::render_current_slide(const MainWindow &main_window, const Time &time) {
-    auto res = main_window.window->getSize();
+void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window,
+                                     const Time &time) {
+    auto res = main_window->window->getSize();
 
-    auto scaling = main_window.scaling_factor;
+    auto scaling = main_window->scaling_factor;
     Slide *current = &slides.at(current_slide);
 
-    main_window.window->clear(current->background_colour);
+    main_window->window->clear(current->background_colour);
 
     for (auto component : current->components) {
         switch (component.component_type) {
@@ -84,14 +86,16 @@ void Slideshow::render_current_slide(const MainWindow &main_window, const Time &
 
                 sf::Text text(text_content, font, 84 * scaling);
                 reset_origin(text);
-                text.setPosition(component.x * res.x, component.y * res.y);
+                text.setPosition((1.0 - component.x) * res.x,
+                                 (1.0 - component.y) * res.y);
                 text.setFillColor(component.font_colour);
-                if (component.custom_shader) {
-                    auto shader = shader_manager->get(component.shader_name);
+                if (component.shader_name) {
+                    auto shader =
+                        shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
-                    main_window.window->draw(text, shader.get());
+                    main_window->window->draw(text, shader.get());
                 } else {
-                    main_window.window->draw(text);
+                    main_window->window->draw(text);
                 }
                 break;
             }
@@ -100,12 +104,13 @@ void Slideshow::render_current_slide(const MainWindow &main_window, const Time &
                 reset_origin(sprite);
                 sprite.setPosition(component.x * res.x, component.y * res.y);
                 sprite.setScale(scaling, scaling);
-                if (component.custom_shader) {
-                    auto shader = shader_manager->get(component.shader_name);
+                if (component.shader_name) {
+                    auto shader =
+                        shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
-                    main_window.window->draw(sprite, shader.get());
+                    main_window->window->draw(sprite, shader.get());
                 } else {
-                    main_window.window->draw(sprite);
+                    main_window->window->draw(sprite);
                 }
                 break;
             }

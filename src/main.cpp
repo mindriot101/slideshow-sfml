@@ -1,11 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <cstdint>
+#include <fstream>
 #include <iostream>
 #include <map>
+#include <streambuf>
 #include <string>
 #include <vector>
 
+#include "config.h"
 #include "font_manager.h"
 #include "globals.h"
 #include "image_manager.h"
@@ -22,6 +25,6 @@ using namespace std;
 std::map<std::string, sf::Texture> TEXTURES;
 
 int main() {
-    Presenter presenter("..");
+    Presenter presenter;
     return presenter.run();
 }

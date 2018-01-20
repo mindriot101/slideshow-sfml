@@ -6,4 +6,4 @@ struct Time {
     float total;
 };
 
-#endif // TIME_H_
+#endif  // TIME_H_
