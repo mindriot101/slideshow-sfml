@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "globals.h"
+#include "option.h"
 
 enum class ComponentType {
     NONE,
@@ -16,8 +17,7 @@ struct SlideComponent {
     float x;
     float y;
     ComponentType component_type = ComponentType::NONE;
-    std::string shader_name;
-    bool custom_shader = false;
+    Option<std::string> shader_name = Option<std::string>::None();
 
     /* Text fields */
     std::string text;

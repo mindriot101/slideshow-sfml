@@ -219,8 +219,7 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
         }
 
         auto comp = current.last_component();
-        comp->shader_name = current_shader.value;
-        comp->custom_shader = true;
+        comp->shader_name = current_shader;
         current_shader = Option<string>::None();
 
     } else if (tag == "new_slide") {

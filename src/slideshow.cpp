@@ -35,8 +35,8 @@ string colour_to_string(const sf::Color &colour) {
 void print(const SlideComponent &c, int no) {
     cout << "  - Component: " << no << endl;
 
-    if (c.custom_shader) {
-        cout << "    - Shader name: " << c.shader_name << endl;
+    if (c.shader_name) {
+        cout << "    - Shader name: " << c.shader_name.value << endl;
     } else {
         cout << "    - No shader" << endl;
     }
@@ -86,8 +86,8 @@ void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, 
                 reset_origin(text);
                 text.setPosition(component.x * res.x, component.y * res.y);
                 text.setFillColor(component.font_colour);
-                if (component.custom_shader) {
-                    auto shader = shader_manager->get(component.shader_name);
+                if (component.shader_name) {
+                    auto shader = shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
                     main_window->window->draw(text, shader.get());
                 } else {
@@ -100,8 +100,8 @@ void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, 
                 reset_origin(sprite);
                 sprite.setPosition(component.x * res.x, component.y * res.y);
                 sprite.setScale(scaling, scaling);
-                if (component.custom_shader) {
-                    auto shader = shader_manager->get(component.shader_name);
+                if (component.shader_name) {
+                    auto shader = shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
                     main_window->window->draw(sprite, shader.get());
                 } else {
