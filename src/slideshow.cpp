@@ -58,7 +58,8 @@ void print(const SlideComponent &c, int no) {
 
 }  // namespace
 
-Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, ShaderManager &shader_manager) {
+Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager,
+                     ShaderManager &shader_manager) {
     this->font_manager = &font_manager;
     this->image_manager = &image_manager;
     this->shader_manager = &shader_manager;
@@ -66,7 +67,8 @@ Slideshow::Slideshow(FontManager &font_manager, ImageManager &image_manager, Sha
 
 void Slideshow::add(const Slide &slide) { slides.push_back(slide); }
 
-void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, const Time &time) {
+void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window,
+                                     const Time &time) {
     auto res = main_window->window->getSize();
 
     auto scaling = main_window->scaling_factor;
@@ -84,10 +86,12 @@ void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, 
 
                 sf::Text text(text_content, font, 84 * scaling);
                 reset_origin(text);
-                text.setPosition((1.0 - component.x) * res.x, (1.0 - component.y) * res.y);
+                text.setPosition((1.0 - component.x) * res.x,
+                                 (1.0 - component.y) * res.y);
                 text.setFillColor(component.font_colour);
                 if (component.shader_name) {
-                    auto shader = shader_manager->get(component.shader_name.value);
+                    auto shader =
+                        shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
                     main_window->window->draw(text, shader.get());
                 } else {
@@ -101,7 +105,8 @@ void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, 
                 sprite.setPosition(component.x * res.x, component.y * res.y);
                 sprite.setScale(scaling, scaling);
                 if (component.shader_name) {
-                    auto shader = shader_manager->get(component.shader_name.value);
+                    auto shader =
+                        shader_manager->get(component.shader_name.value);
                     shader->setUniform("t", time.total);
                     main_window->window->draw(sprite, shader.get());
                 } else {

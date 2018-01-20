@@ -2,13 +2,13 @@
 #define PRESENTER_H_
 
 #include <memory>
+#include "config.h"
 #include "font_manager.h"
 #include "image_manager.h"
 #include "main_window.h"
+#include "option.h"
 #include "shader_manager.h"
 #include "slide.h"
-#include "config.h"
-#include "option.h"
 
 struct Slideshow;
 
@@ -22,7 +22,8 @@ struct Presenter {
 
     Presenter();
 
-    void handle_line(const std::string &line, ConfigSection &section, Slide &current, Option<std::string> &current_shader);
+    void handle_line(const std::string &line, ConfigSection &section,
+                     Slide &current, Option<std::string> &current_shader);
     void parse_config(const std::string &filename);
 
     int run();

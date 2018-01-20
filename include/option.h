@@ -19,17 +19,11 @@ struct Option {
         return option;
     }
 
-    bool is_some() const {
-        return has_value;
-    }
+    bool is_some() const { return has_value; }
 
-    bool is_none() const {
-        return !is_some();
-    }
+    bool is_none() const { return !is_some(); }
 
-    operator bool() const {
-        return is_some();
-    }
+    operator bool() const { return is_some(); }
 };
 
-#endif // OPTION_H_
+#endif  // OPTION_H_

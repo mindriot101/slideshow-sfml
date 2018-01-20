@@ -1,13 +1,14 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <cstdint>
+#include <fstream>
 #include <iostream>
 #include <map>
-#include <string>
-#include <fstream>
 #include <streambuf>
+#include <string>
 #include <vector>
 
+#include "config.h"
 #include "font_manager.h"
 #include "globals.h"
 #include "image_manager.h"
@@ -16,7 +17,6 @@
 #include "slide.h"
 #include "slide_component.h"
 #include "slideshow.h"
-#include "config.h"
 
 using namespace std;
 
@@ -25,7 +25,6 @@ using namespace std;
 std::map<std::string, sf::Texture> TEXTURES;
 
 int main() {
-
     Presenter presenter;
     return presenter.run();
 }

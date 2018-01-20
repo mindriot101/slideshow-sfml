@@ -9,12 +9,13 @@ MainWindow::MainWindow(int width, int height) {
     settings.minorVersion = 1;
     settings.antialiasingLevel = 2;
 
-    window = make_unique<sf::RenderWindow>(
-        sf::VideoMode(width, height), "Presentation",
-        sf::Style::Default, settings);
+    window = make_unique<sf::RenderWindow>(sf::VideoMode(width, height),
+                                           "Presentation", sf::Style::Default,
+                                           settings);
 
     sf::ContextSettings used_settings = window->getSettings();
-    std::cout << "OpenGL version: "<< used_settings.majorVersion << "." << used_settings.minorVersion << std::endl;
+    std::cout << "OpenGL version: " << used_settings.majorVersion << "."
+              << used_settings.minorVersion << std::endl;
 
     window_width = width;
     window_height = height;

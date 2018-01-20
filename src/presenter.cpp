@@ -1,74 +1,74 @@
 #include "presenter.h"
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
-#include "slideshow.h"
 #include "presenter_time.h"
+#include "slideshow.h"
 
 using namespace std;
 
 namespace {
-    string join_prefix(const string &prefix, const string &path) {
-        stringstream ss;
-        ss << prefix << "/" << path;
-        return ss.str();
-    }
+string join_prefix(const string &prefix, const string &path) {
+    stringstream ss;
+    ss << prefix << "/" << path;
+    return ss.str();
+}
 
-    template <typename T, typename Lambda>
-        vector<T> take_while(const vector<T> inp, Lambda F) {
-            vector<T> out;
-            for (auto value : inp) {
-                if (!F(value)) {
-                    break;
-                }
-
-                out.push_back(value);
-            }
-            return out;
+template <typename T, typename Lambda>
+vector<T> take_while(const vector<T> inp, Lambda F) {
+    vector<T> out;
+    for (auto value : inp) {
+        if (!F(value)) {
+            break;
         }
 
-    string parse_slide_text(const string &line, int *next_pos) {
-        stringstream ss;
-        bool collecting = false;
-        for (auto c: line) {
-            if (!collecting && (c == '"')) {
-                collecting = true;
-                continue;
-            }
+        out.push_back(value);
+    }
+    return out;
+}
 
-            if (collecting && (c == ' ')) {
-                (*next_pos)++;
-            }
-
-            if (collecting && (c != '"')) {
-                ss << c;
-            }
-
-            if (collecting && (c == '"')) {
-                (*next_pos)++;
-                break;
-            }
+string parse_slide_text(const string &line, int *next_pos) {
+    stringstream ss;
+    bool collecting = false;
+    for (auto c : line) {
+        if (!collecting && (c == '"')) {
+            collecting = true;
+            continue;
         }
 
-        return ss.str();
+        if (collecting && (c == ' ')) {
+            (*next_pos)++;
+        }
+
+        if (collecting && (c != '"')) {
+            ss << c;
+        }
+
+        if (collecting && (c == '"')) {
+            (*next_pos)++;
+            break;
+        }
     }
+
+    return ss.str();
+}
 
 }  // namespace
 
 Presenter::Presenter() {
     if (!sf::Shader::isAvailable()) {
         cerr << "Shaders not available on this platform. Cannot continue."
-            << endl;
+             << endl;
         exit(EXIT_FAILURE);
     }
 
-    slideshow = make_unique<Slideshow>(font_manager, image_manager, shader_manager);
+    slideshow =
+        make_unique<Slideshow>(font_manager, image_manager, shader_manager);
 
     auto config_filename = "../config.txt";
     parse_config(config_filename);
 }
-
 
 void Presenter::parse_config(const string &filename) {
     ifstream ifs(filename);
@@ -76,7 +76,8 @@ void Presenter::parse_config(const string &filename) {
 
     ConfigSection section = ConfigSection::Defaults;
     Slide current;
-    Option<string> current_shader = Option<string>::None();;
+    Option<string> current_shader = Option<string>::None();
+    ;
 
     while (getline(ifs, line)) {
         if (line.empty() || line == "\n") {
@@ -86,18 +87,20 @@ void Presenter::parse_config(const string &filename) {
     }
 }
 
-void Presenter::handle_line(const string &line, ConfigSection &section, Slide &current, Option<string> &current_shader) {
+void Presenter::handle_line(const string &line, ConfigSection &section,
+                            Slide &current, Option<string> &current_shader) {
     istringstream iss(line);
     vector<string> tokens{istream_iterator<string>(iss),
-        istream_iterator<string>()};
+                          istream_iterator<string>()};
 
     /* Remove anything after comments */
-    vector<string> valid_tokens = take_while(tokens, [](string token) { return token != "#"; });
+    vector<string> valid_tokens =
+        take_while(tokens, [](string token) { return token != "#"; });
     if (valid_tokens.empty()) {
         return;
     }
 
-    for (auto key: valid_tokens) {
+    for (auto key : valid_tokens) {
         cout << key << " ";
     }
     cout << endl;
@@ -105,7 +108,9 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
     auto tag = valid_tokens[0];
     if (tag == "resolution") {
         if (section != ConfigSection::Defaults) {
-            cerr << "Resolution key belongs in the defaults section of the config file" << endl;
+            cerr << "Resolution key belongs in the defaults section of the "
+                    "config file"
+                 << endl;
             exit(EXIT_FAILURE);
         }
 
@@ -130,7 +135,9 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
 
     } else if (tag == "font") {
         if (section != ConfigSection::Defaults) {
-            cerr << "Font definition belongs in the defaults section of the config file" << endl;
+            cerr << "Font definition belongs in the defaults section of the "
+                    "config file"
+                 << endl;
             exit(EXIT_FAILURE);
         }
 
@@ -157,7 +164,9 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
 
     } else if (tag == "shader") {
         if (section != ConfigSection::Defaults) {
-            cerr << "Shader definition belongs in the defaults section of the config file" << endl;
+            cerr << "Shader definition belongs in the defaults section of the "
+                    "config file"
+                 << endl;
             exit(EXIT_FAILURE);
         }
 
@@ -169,7 +178,9 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
 
     } else if (tag == "slides") {
         if (section != ConfigSection::Defaults) {
-            cerr << "Cannot declare new slides within slides section. Use `new_slide` command." << endl;
+            cerr << "Cannot declare new slides within slides section. Use "
+                    "`new_slide` command."
+                 << endl;
             exit(EXIT_FAILURE);
         }
 
@@ -193,7 +204,8 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
         font_colour.g = atoi(valid_tokens.at(next_pos++).c_str());
         font_colour.b = atoi(valid_tokens.at(next_pos++).c_str());
 
-        auto component = SlideComponent::centered_text(text, font_name, font_colour);
+        auto component =
+            SlideComponent::centered_text(text, font_name, font_colour);
         component.x = atof(valid_tokens.at(next_pos++).c_str());
         component.y = atof(valid_tokens.at(next_pos++).c_str());
 
@@ -217,7 +229,7 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
         if (section != ConfigSection::Slides) {
             cerr << "`endwith` statement belongs in a slide definition" << endl;
             exit(EXIT_FAILURE);
-        } 
+        }
 
         /* Attach the current shader to the previous component */
         if (!current_shader) {
@@ -231,9 +243,10 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
 
     } else if (tag == "new_slide") {
         if (section != ConfigSection::Slides) {
-            cerr << "New slide declaration belongs in a slide definition" << endl;
+            cerr << "New slide declaration belongs in a slide definition"
+                 << endl;
             exit(EXIT_FAILURE);
-        } 
+        }
         slideshow->add(current);
         current = {};
 
