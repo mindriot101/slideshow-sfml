@@ -84,7 +84,7 @@ void Slideshow::render_current_slide(const unique_ptr<MainWindow> &main_window, 
 
                 sf::Text text(text_content, font, 84 * scaling);
                 reset_origin(text);
-                text.setPosition(component.x * res.x, component.y * res.y);
+                text.setPosition((1.0 - component.x) * res.x, (1.0 - component.y) * res.y);
                 text.setFillColor(component.font_colour);
                 if (component.shader_name) {
                     auto shader = shader_manager->get(component.shader_name.value);

@@ -139,14 +139,21 @@ void Presenter::handle_line(const string &line, ConfigSection &section, Slide &c
         font_manager.add(tag, path);
 
     } else if (tag == "image") {
-        if (section != ConfigSection::Defaults) {
-            cerr << "Image definition belongs in the defaults section of the config file" << endl;
-            exit(EXIT_FAILURE);
-        }
+        if (section == ConfigSection::Defaults) {
+            auto tag = valid_tokens.at(1);
+            auto path = valid_tokens.at(2);
+            image_manager.add(tag, path);
+        } else {
+            auto name = valid_tokens.at(1);
+            auto x = atof(valid_tokens.at(2).c_str());
+            auto y = atof(valid_tokens.at(3).c_str());
 
-        auto tag = valid_tokens.at(1);
-        auto path = valid_tokens.at(2);
-        image_manager.add(tag, path);
+            auto component = SlideComponent::centered_image(name);
+            component.x = x;
+            component.y = y;
+
+            current.components.push_back(component);
+        }
 
     } else if (tag == "shader") {
         if (section != ConfigSection::Defaults) {
