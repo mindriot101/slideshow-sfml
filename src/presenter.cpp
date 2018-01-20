@@ -121,6 +121,8 @@ void Presenter::handle_line(const string &line, ConfigSection &section,
         auto height = atoi(height_str.c_str());
 
         window = make_unique<MainWindow>(width, height);
+        window->window->setMouseCursorGrabbed(true);
+        window->window->setMouseCursorVisible(mouse_visible);
 
     } else if (tag == "background_colour") {
         auto r = atoi(valid_tokens.at(1).c_str());
@@ -291,6 +293,10 @@ int Presenter::run() {
                     case sf::Keyboard::F:
                         window->toggle_fullscreen();
                         slideshow->recenter_content();
+                        break;
+                    case sf::Keyboard::M:
+                        mouse_visible = !mouse_visible;
+                        window->window->setMouseCursorVisible(mouse_visible);
                         break;
                     default:
                         break;

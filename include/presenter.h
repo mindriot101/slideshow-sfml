@@ -20,6 +20,8 @@ struct Presenter {
     std::unique_ptr<MainWindow> window;
     std::unique_ptr<Slideshow> slideshow;
 
+    bool mouse_visible = false;
+
     Presenter();
 
     void handle_line(const std::string &line, ConfigSection &section,
