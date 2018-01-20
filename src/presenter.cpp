@@ -118,7 +118,8 @@ void Presenter::handle_line(const string &line, ConfigSection &section,
         auto height_str = valid_tokens.at(2);
 
         auto width = atoi(width_str.c_str());
-        auto height = atoi(width_str.c_str());
+        auto height = atoi(height_str.c_str());
+
         window = make_unique<MainWindow>(width, height);
 
     } else if (tag == "background_colour") {
