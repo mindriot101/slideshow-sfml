@@ -30,7 +30,7 @@ void MainWindow::toggle_fullscreen() {
     if (fullscreen) {
         mode = sf::VideoMode::getDesktopMode();
     } else {
-        mode = sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
+        mode = sf::VideoMode(window_width, window_height);
     }
 
     window->create(mode, "Presentation", style);

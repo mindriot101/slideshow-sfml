@@ -6,10 +6,6 @@
 #include <map>
 #include <string>
 
-/* Global variables */
-const uint32_t WINDOW_WIDTH = 1280;
-const uint32_t WINDOW_HEIGHT = 720;
-
 /* Colours */
 const sf::Color BLACK(0, 0, 0);
 const sf::Color WHITE(255, 255, 255);
